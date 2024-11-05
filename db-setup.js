@@ -5,12 +5,10 @@ import { Database } from 'sqlite-async';
 
 export async function initDB(inMemory = false) {
   const dbPath = inMemory ? ':memory:' : './db/sqlite.db';
+  const dir = path.dirname(dbPath);
 
-  if (!inMemory) {
-    const dir = path.dirname(dbPath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
+  if (!inMemory && !fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
 
   const db = await Database.open(dbPath);
