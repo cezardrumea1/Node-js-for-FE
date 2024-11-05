@@ -3,8 +3,6 @@ import path from 'path';
 
 import { Database } from 'sqlite-async';
 
-process.env.NODE_ENV = 'test';
-
 export async function initDB(inMemory = false) {
   const dbPath = inMemory ? ':memory:' : './db/sqlite.db';
 
