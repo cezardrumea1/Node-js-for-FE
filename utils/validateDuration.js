@@ -4,15 +4,24 @@ export default function (duration, res) {
     return true;
   }
 
-  if (isNaN(+duration) || typeof +duration !== 'number' || +duration < 1) {
-    res.status(400).json({ error: 'Duration must be a positive number' });
+  const trimmedDuration =
+    typeof duration === 'string' ? duration.trim() : duration;
+
+  if (
+    isNaN(+trimmedDuration) ||
+    typeof +trimmedDuration !== 'number' ||
+    +trimmedDuration < 1
+  ) {
+    res
+      .status(400)
+      .json({ error: 'Invalid Duration, it must be a positive number' });
     return true;
   }
 
-  if (+duration > 1440) {
-    res
-      .status(400)
-      .json({ error: 'Duration must be less than 1440 minutes (1 day)' });
+  if (+trimmedDuration > 1440) {
+    res.status(400).json({
+      error: 'Invalid Duration, it must be less than 1440 minutes (1 day)',
+    });
     return true;
   }
 

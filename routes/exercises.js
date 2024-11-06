@@ -12,9 +12,10 @@ export default (db) => {
     const { _id } = req.params;
     const { description, duration, date } = req.body;
 
-    const exerciseDate = date
-      ? date.trim()
-      : new Date().toISOString().split('T')[0];
+    const exerciseDate =
+      date && typeof date === 'string'
+        ? date.trim()
+        : new Date().toISOString().split('T')[0];
 
     try {
       const userIDs = (await db.all(`SELECT id FROM users`)).map(

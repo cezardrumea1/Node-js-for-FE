@@ -13,7 +13,9 @@ export default function (from, to, limit, res) {
   }
 
   if ((limit && isNaN(+limit)) || typeof +limit !== 'number' || +limit < 1) {
-    res.status(400).json({ error: 'Limit must be a positive number' });
+    res
+      .status(400)
+      .json({ error: 'Invalid Limit, it must be a positive number' });
     return true;
   }
 
