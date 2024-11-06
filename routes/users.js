@@ -1,13 +1,14 @@
 import express from 'express';
+import validateUsername from '../utils/validateUsername.js';
 
 const router = express.Router();
 
 export default (db) => {
   router.post('/users', async (req, res) => {
     const { username } = req.body;
-    if (!username) {
-      return res.status(400).json({ error: 'Username is required' });
-    }
+
+    if (validateUsername(username, res)) return;
+
     try {
       const result = await db.run(`INSERT INTO users (username) VALUES (?)`, [
         username,

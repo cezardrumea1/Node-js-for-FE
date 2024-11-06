@@ -1,4 +1,6 @@
 import express from 'express';
+import validateQueryParams from '../utils/validateQueryParams.js';
+import buildLogsQuery from '../utils/buildLogsQuery.js';
 
 const router = express.Router();
 
@@ -7,30 +9,27 @@ export default (db) => {
     const { _id } = req.params;
     const { from, to, limit } = req.query;
 
+    if (validateQueryParams(from, to, limit, res)) return;
+
     try {
       const user = await db.get(`SELECT * FROM users WHERE id = ?`, [_id]);
+
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      let query = `SELECT * FROM exercises WHERE userId = ?`;
-      const params = [_id];
+      const { logsQuery, countQuery, params } = buildLogsQuery(
+        _id,
+        from,
+        to,
+        limit
+      );
 
-      if (from) {
-        query += ` AND date >= ?`;
-        params.push(from);
-      }
-      if (to) {
-        query += ` AND date <= ?`;
-        params.push(to);
-      }
-      if (limit) {
-        query += ` LIMIT ?`;
-        params.push(parseInt(limit, 10));
-      }
+      const { count } = await db.get(countQuery, params);
 
-      const logs = await db.all(query, params);
-      res.json({ ...user, logs, count: logs.length });
+      const logs = await db.all(logsQuery, params);
+
+      res.json({ ...user, logs, count });
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch logs' });
     }
