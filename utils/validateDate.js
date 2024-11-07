@@ -10,23 +10,18 @@ export default function (date, res) {
 
   const [year, month, day] = date.split('-').map((s) => parseInt(s));
 
-  if (day < 1 || day > 31) {
-    res.status(400).json({
-      error: 'Invalid date, day should be between 1 and 31',
-    });
-  }
-
-  if (month < 1 || month > 12) {
-    res.status(400).json({
-      error: 'Invalid date, month should be between 1 and 12',
-    });
-    return true;
-  }
-
   if (year < 1900 || year > 2100) {
     res
       .status(400)
       .json({ error: 'Invalid date, year should be between 1900 and 2100' });
+    return true;
+  }
+
+  if (month < 1 || month > 12 || day < 1 || day > 31) {
+    res.status(400).json({
+      error:
+        'Invalid date, month should be between 1 and 12 and day should be between 1 and 31',
+    });
     return true;
   }
 
