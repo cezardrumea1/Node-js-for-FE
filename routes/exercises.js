@@ -24,9 +24,9 @@ export default (db) => {
 
       if (
         validateUserID(_id, userIDs, res) ||
-        validateDate(exerciseDate, res) ||
         validateDescription(description, res) ||
-        validateDuration(duration, res)
+        validateDuration(duration, res) ||
+        validateDate(exerciseDate, res)
       ) {
         return;
       }
