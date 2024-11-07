@@ -18,12 +18,18 @@ export default (db) => {
         : new Date().toISOString().split('T')[0];
 
     try {
-      const userIDs = (await db.all(`SELECT id FROM users`)).map(
-        ({ id }) => id
+      if (validateUserID(_id, res)) return;
+
+      const { userExists } = await db.get(
+        `SELECT EXISTS(SELECT 1 FROM users WHERE id = ?) AS userExists`,
+        [_id]
       );
 
+      if (!userExists) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
       if (
-        validateUserID(_id, userIDs, res) ||
         validateDescription(description, res) ||
         validateDuration(duration, res) ||
         validateDate(exerciseDate, res)

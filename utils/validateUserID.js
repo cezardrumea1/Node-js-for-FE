@@ -1,6 +1,4 @@
-import binarySearchIncludes from './binarySearchIncludes.js';
-
-export default function (id, userIds, res) {
+export default function (id, res) {
   if (id.length > `${id}`.trim().length) {
     res
       .status(400)
@@ -14,11 +12,5 @@ export default function (id, userIds, res) {
       .json({ error: 'Invalid user ID, it should be a positive number' });
     return true;
   }
-
-  if (!binarySearchIncludes(userIds, +id)) {
-    res.status(404).json({ error: 'User not found' });
-    return true;
-  }
-
   return false;
 }
