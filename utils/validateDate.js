@@ -17,14 +17,6 @@ export default function (date, res) {
     return true;
   }
 
-  if (month < 1 || month > 12 || day < 1 || day > 31) {
-    res.status(400).json({
-      error:
-        'Invalid date, month should be between 1 and 12 and day should be between 1 and 31',
-    });
-    return true;
-  }
-
   if (month === 1 && day > 31) {
     res
       .status(400)
@@ -115,6 +107,14 @@ export default function (date, res) {
     res
       .status(400)
       .json({ error: 'Invalid date, December can not have more than 31 days' });
+    return true;
+  }
+
+  if (month < 1 || month > 12 || day < 1 || day > 31) {
+    res.status(400).json({
+      error:
+        'Invalid date, month should be between 1 and 12 and day should be between 1 and 31',
+    });
     return true;
   }
 
